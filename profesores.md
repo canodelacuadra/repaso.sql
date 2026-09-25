@@ -2,8 +2,8 @@
 
 **Público:** alumnado de Desarrollo Web con conocimientos básicos
 **Nivel:** básico
-**Nº de microejercicios:** 8 (progresivos)
-**Puntuación:** 10 puntos por ejercicio (total opcional: 80)
+**Nº de microejercicios:** 21, en dos series (8 básicos + 13 de refuerzo)
+**Puntuación:** 10 puntos por ejercicio (total opcional: 210)
 
 > Este documento te explica cómo funciona la aplicación, cómo añadir o
 > modificar ejercicios y qué diferencias hay entre el motor embebido
@@ -38,6 +38,35 @@ Los ejercicios de modificación (`INSERT` / `UPDATE` / `DELETE`) se ejecutan
 siempre sobre una **copia temporal** de la base de datos. Cada vez que el
 alumno comprueba, la base de datos se reconstruye desde cero. Es imposible
 "romper" los datos por mucho que se equivoquen.
+
+---
+
+## 1.b. Las dos series de ejercicios
+
+La actividad se puede usar completa o por partes: la **serie 1** (ejercicios
+1-8) es la ronda inicial y la **serie 2** (9-21) es una ampliación sobre la
+misma base de datos, pensada para una segunda sesión de práctica.
+
+| # | Título | Qué practica | Tipo |
+|---|--------|--------------|------|
+| 1-8 | Serie 1 (ver `EJERCICIOS` en `index.html`) | `SELECT *`, columnas + `WHERE`, `WHERE` + `ORDER BY`, `ORDER BY DESC` + `LIMIT`, `INSERT`, `UPDATE`, `DELETE`, `JOIN` de dos tablas | mixta |
+| 9 | AND: dos condiciones | `WHERE ... AND ...` | select |
+| 10 | OR: dos opciones | `WHERE ... OR ...` | select |
+| 11 | Rangos con BETWEEN | `BETWEEN` + `ORDER BY` | select |
+| 12 | Buscar texto con LIKE | comodín `%` | select |
+| 13 | Valores sin repetir | `DISTINCT` | select |
+| 14 | Contar con COUNT | `COUNT(*)` | select |
+| 15 | Agrupar con GROUP BY | `GROUP BY` + `COUNT(*)` | select |
+| 16 | Reto: unir tres tablas | `JOIN` encadenado (3 tablas) | select |
+| 17 | LEFT JOIN: sin préstamos | `LEFT JOIN` + `IS NULL` | select |
+| 18 | Actualizar varios libros | `UPDATE` con `<>` (4 filas) | update |
+| 19 | Borrar por fecha | `DELETE` comparando fechas | delete |
+| 20 | Insertar varios libros | `INSERT` con varios `VALUES` | insert |
+| 21 | Reto final: los 2 más recientes | `JOIN` + `WHERE` + `ORDER BY DESC` + `LIMIT` | select |
+
+> Nota para el docente: en los ejercicios 14 y 15 el enunciado pide
+> explícitamente `COUNT(*)` porque la app compara también el **nombre** de
+> las columnas devueltas, y `COUNT(id)` produciría otro nombre.
 
 ---
 
@@ -168,7 +197,7 @@ totalmente locales (privacidad del alumnado). Si quieres usar la actividad
 como evaluación, puedes:
 
 - Asignar una puntuación manual según los ejercicios resueltos (por ejemplo
-  10 puntos × ejercicio = **80 puntos**).
+  10 puntos × ejercicio = **210 puntos**).
 - Pedir una captura de pantalla final con el contador de progreso completo.
 - Pedir en el examen que **escriban en papel o en un documento** las
   soluciones de N ejercicios.

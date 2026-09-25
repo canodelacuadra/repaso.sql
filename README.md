@@ -8,8 +8,11 @@ biblioteca).
 
 ## Qué hace
 
-- 8 microejercicios progresivos: `SELECT`, `WHERE`, `ORDER BY`, `LIMIT`,
-  `INSERT`, `UPDATE`, `DELETE` y un reto final con `JOIN`.
+- 21 microejercicios progresivos repartidos en dos series: la **serie 1**
+  (1-8) recorre `SELECT`, `WHERE`, `ORDER BY`, `LIMIT`, `INSERT`, `UPDATE`,
+  `DELETE` y un reto con `JOIN`; la **serie 2** (9-21) repite la misma base
+  de datos con `AND`, `OR`, `BETWEEN`, `LIKE`, `DISTINCT`, `COUNT`,
+  `GROUP BY`, `LEFT JOIN`, JOIN de tres tablas y reto final.
 - Retroalimentación didáctica: resultado real de la consulta, comparación
   con lo esperado, errores SQL traducidos al español y botón de pista.
 - Los ejercicios de modificación corren sobre **copias temporales** de la

@@ -70,7 +70,7 @@ footer{margin:26px auto 40px;max-width:1180px;padding:0 18px;color:var(--mut);fo
   <h1>repaso.sql</h1>
   <span class="tag">Práctica de consultas SQL · nivel básico</span>
   <div id="barra-progreso-wrap"><div id="barra-progreso"></div></div>
-  <div id="txt-progreso">0 / 8</div>
+  <div id="txt-progreso">0 / 21</div>
 </header>
 
 <div class="layout">
@@ -112,7 +112,8 @@ footer{margin:26px auto 40px;max-width:1180px;padding:0 18px;color:var(--mut);fo
 
 <footer>
   <strong>Esquema de datos:</strong> autores, libros, socios y prestamos. Este mini-motor usa <strong>SQLite</strong> (compatible
-  con MySQL en estas sentencias básicas: SELECT, WHERE, ORDER BY, LIMIT, INSERT, UPDATE, DELETE y JOIN ... ON).
+  con MySQL en estas sentencias básicas: SELECT, WHERE, AND/OR, BETWEEN, LIKE, DISTINCT, COUNT, GROUP BY, ORDER BY, LIMIT,
+  INSERT, UPDATE, DELETE y JOIN ... ON).
   Los ejercicios de modificación de datos se ejecutan sobre una copia temporal de la base de datos, así que puedes
   equivocarte sin romper nada.
 </footer>
@@ -445,6 +446,113 @@ const EJERCICIOS = [
     pista: 'Une las dos tablas con un JOIN por la relación autores.id = libros.id_autor. Por ejemplo: SELECT autores.nombre, libros.titulo FROM autores JOIN libros ON ... ORDER BY autores.nombre;',
     solucion: "SELECT autores.nombre, libros.titulo FROM autores JOIN libros ON autores.id = libros.id_autor ORDER BY autores.nombre;",
     ordenSensible: false
+  },
+  {
+    titulo: 'AND: dos condiciones',
+    tipo: 'select',
+    enunciado: "La biblioteca está montando un club de lectura de novelas modernas. Necesita el título y el año de los libros de género 'novela' publicados DESPUÉS de 1960. El filtro debe cumplir las dos condiciones a la vez.",
+    pista: "En el WHERE puedes poner varias condiciones separadas por AND: WHERE genero = 'novela' AND anio > 1960;  Los textos van siempre entre comillas simples.",
+    solucion: "SELECT titulo, anio FROM libros WHERE genero = 'novela' AND anio > 1960;",
+    ordenSensible: false
+  },
+  {
+    titulo: 'OR: dos opciones',
+    tipo: 'select',
+    enunciado: "El conservador prepara un rincón de «clásicos y poesía». Muestra el título y el género de los libros cuyo género sea 'clásico' O bien 'poesía' (con que se cumpla una de las dos vale).",
+    pista: "Une las dos posibilidades con OR: WHERE genero = 'clásico' OR genero = 'poesía'. Con AND se exigen las dos condiciones; con OR basta con una.",
+    solucion: "SELECT titulo, genero FROM libros WHERE genero = 'clásico' OR genero = 'poesía';",
+    ordenSensible: false
+  },
+  {
+    titulo: 'Rangos con BETWEEN',
+    tipo: 'select',
+    enunciado: 'Busca los libros publicados entre 1944 y 1967, ambos años incluidos. Devuelve el título y el año, ordenados por año de forma ASCENDENTE (del más antiguo al más reciente).',
+    pista: "BETWEEN incluye los dos extremos: WHERE anio BETWEEN 1944 AND 1967. El ORDER BY va después del WHERE: ... WHERE anio BETWEEN 1944 AND 1967 ORDER BY anio;",
+    solucion: "SELECT titulo, anio FROM libros WHERE anio BETWEEN 1944 AND 1967 ORDER BY anio;",
+    ordenSensible: true
+  },
+  {
+    titulo: 'Buscar texto con LIKE',
+    tipo: 'select',
+    enunciado: "Un socio solo recuerda que el título de sus libros contiene la palabra 'amor'. Muestra el título de todos los libros que la contengan en cualquier parte de su título.",
+    pista: "El comodín % significa «cualquier texto, incluso nada». Por eso LIKE '%amor%' encuentra la palabra amor al principio, en medio o al final.",
+    solucion: "SELECT titulo FROM libros WHERE titulo LIKE '%amor%';",
+    ordenSensible: false
+  },
+  {
+    titulo: 'Valores sin repetir',
+    tipo: 'select',
+    enunciado: 'Para el cartel de la sección necesitamos saber qué géneros hay en la biblioteca, sin repetir ninguno. Devuelve la columna genero con los valores distintos.',
+    pista: "DISTINCT va justo después de SELECT y descarta las filas repetidas: SELECT DISTINCT genero FROM libros;",
+    solucion: "SELECT DISTINCT genero FROM libros;",
+    ordenSensible: false
+  },
+  {
+    titulo: 'Contar con COUNT',
+    tipo: 'select',
+    enunciado: 'La dirección quiere saber cuántos libros hay en el catálogo. Devuelve una única columna con el número total de libros. Usa exactamente COUNT(*), con el asterisco dentro de los paréntesis.',
+    pista: "COUNT(*) cuenta las filas de la tabla. Escribe exactamente COUNT(*) (no COUNT, ni COUNT(id)): SELECT COUNT(*) FROM libros;",
+    solucion: "SELECT COUNT(*) FROM libros;",
+    ordenSensible: false
+  },
+  {
+    titulo: 'Agrupar con GROUP BY',
+    tipo: 'select',
+    enunciado: "Muestra cuántos libros hay de cada género. Devuelve dos columnas: el género y el número de libros de ese género, usando exactamente COUNT(*). Una fila por género y da igual el orden en que aparezcan.",
+    pista: "GROUP BY va al final y agrupa las filas que comparten el mismo valor de esa columna: SELECT genero, COUNT(*) FROM libros GROUP BY genero;  Escribe COUNT(*) con el asterisco.",
+    solucion: "SELECT genero, COUNT(*) FROM libros GROUP BY genero;",
+    ordenSensible: false
+  },
+  {
+    titulo: 'Reto: unir tres tablas',
+    tipo: 'select',
+    enunciado: 'Queremos el historial completo de la biblioteca: quién se llevó cada libro, cuál fue y cuándo. Devuelve el nombre del socio, el título del libro y la fecha del préstamo, ordenados por fecha de forma ASCENDENTE.',
+    pista: "Encadena dos JOIN: socios con prestamos (socios.id = prestamos.id_socio) y prestamos con libros (prestamos.id_libro = libros.id). Como varias tablas tienen una columna id, antepón siempre el nombre de la tabla: libros.titulo, no titulo.",
+    solucion: "SELECT socios.nombre, libros.titulo, prestamos.fecha_prestamo FROM socios JOIN prestamos ON socios.id = prestamos.id_socio JOIN libros ON libros.id = prestamos.id_libro ORDER BY prestamos.fecha_prestamo;",
+    ordenSensible: true
+  },
+  {
+    titulo: 'LEFT JOIN: sin préstamos',
+    tipo: 'select',
+    enunciado: 'La biblioteca quiere escribir a los socios que todavía no han taken ningún libro prestado. Devuelve únicamente el nombre de esos socios.',
+    pista: "LEFT JOIN conserva a los socios aunque no tengan préstamo (les deja NULL). Para quedarte solo con ellos usa el filtro: ... LEFT JOIN prestamos ON socios.id = prestamos.id_socio WHERE prestamos.id IS NULL;",
+    solucion: "SELECT socios.nombre FROM socios LEFT JOIN prestamos ON socios.id = prestamos.id_socio WHERE prestamos.id IS NULL;",
+    ordenSensible: false
+  },
+  {
+    titulo: 'Actualizar varios libros',
+    tipo: 'update',
+    enunciado: "Han llegado los autentificadores de las novelas, así que de momento solo se pueden prestar las novelas. Actualiza en la tabla libros su campo disponible y ponlo a 0 en TODOS los libros cuyo género NO sea 'novela'.",
+    pista: "El «distinto de» se escribe con el operador <> (distinto que): WHERE genero <> 'novela'. Esa condición toca 4 libros; si olvidas el WHERE los cambiarías todos.",
+    solucion: "UPDATE libros SET disponible = 0 WHERE genero <> 'novela';",
+    verificar: "SELECT libros.titulo, libros.genero, libros.disponible FROM libros ORDER BY libros.id;",
+    filasEsperadas: 4
+  },
+  {
+    titulo: 'Borrar por fecha',
+    tipo: 'delete',
+    enunciado: "Ya se ha archivado todo lo anterior a 2025. Borra de la tabla prestamos los préstamos cuya fecha_prestamo sea ANTERIOR al 1 de enero de 2025 ('2025-01-01').",
+    pista: "Las fechas se guardan como texto 'AAAA-MM-DD' y ese orden se puede comparar directamente: fecha_prestamo < '2025-01-01'. El texto de la fecha va entre comillas simples.",
+    solucion: "DELETE FROM prestamos WHERE fecha_prestamo < '2025-01-01';",
+    verificar: "SELECT prestamos.id, prestamos.id_libro, prestamos.id_socio, prestamos.fecha_prestamo FROM prestamos ORDER BY prestamos.id;",
+    filasEsperadas: 3
+  },
+  {
+    titulo: 'Insertar varios libros',
+    tipo: 'insert',
+    enunciado: "Han llegado dos libros nuevos a la vez. Inserta las dos filas en una sola sentencia: 'La amortajada' (id_autor 2, anio 1988, género 'novela', disponible 1) y 'Tucumán' (id_autor 6, anio 1923, género 'poesía', disponible 1).",
+    pista: "Una sentencia INSERT admite varios VALUES separados por comas y un único punto y coma al final: ... VALUES ('La amortajada', 2, 1988, 'novela', 1), ('Tucumán', 6, 1923, 'poesía', 1);",
+    solucion: "INSERT INTO libros (titulo, id_autor, anio, genero, disponible) VALUES ('La amortajada', 2, 1988, 'novela', 1), ('Tucumán', 6, 1923, 'poesía', 1);",
+    verificar: "SELECT libros.titulo, libros.id_autor, libros.anio, libros.genero, libros.disponible FROM libros ORDER BY libros.id;",
+    filasEsperadas: 2
+  },
+  {
+    titulo: 'Reto final: los 2 más recientes',
+    tipo: 'select',
+    enunciado: "Último reto: el cartel de loans de novela. Devuelve el nombre del socio, el título del libro y la fecha del préstamo, solo de los libros de género 'novela', ordenados por fecha de forma DESCENDENTE y limitando el resultado a los 2 préstamos más recientes.",
+    pista: "Encadena las piezas: dos JOIN (socios → prestamos → libros), luego WHERE libros.genero = 'novela', después ORDER BY prestamos.fecha_prestamo DESC y, por último, LIMIT 2. El WHERE va antes del ORDER BY.",
+    solucion: "SELECT socios.nombre, libros.titulo, prestamos.fecha_prestamo FROM socios JOIN prestamos ON socios.id = prestamos.id_socio JOIN libros ON libros.id = prestamos.id_libro WHERE libros.genero = 'novela' ORDER BY prestamos.fecha_prestamo DESC LIMIT 2;",
+    ordenSensible: true
   }
 ];
 
